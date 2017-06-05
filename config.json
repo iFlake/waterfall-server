@@ -1,0 +1,27 @@
+{
+    "apiservers":
+    [
+        {
+            "ip": "::",
+            "port": 17192
+        },
+        {
+            "ip": "0.0.0.0",
+            "port": 17192
+        }
+    ],
+    "security":
+    {
+        "ipaddresses":
+        [
+            "::",
+            "0.0.0.0"
+        ],
+        "token": "V3NXutpzswzZVTEZqX7vKJRdjnRCbPBfHwAQuZ3BCbzHbvVBXDVMeAcPhZqprL4gjTFQapTW6fdRuKdA7GXMGEb7dv5Nsa2H2EGMdfsKNba5AC4g6c7WfD8yf7VrmXYscQr9LarN4crwz26vYdtaeCvHD57UyF6rzSSqnqsGBFF5ZVxUhnbpH4FYvuUzcUhm8n3EjhhRxQuRvaayZ7t834Ycd3zM3qYw34cJqAdxhYGQuQynTp4AN6GT2cFxhRfWLY2JzzTk85GWKMYcJE6kaZnRtVS6R7Gg",
+        "maxreqlength": 262144
+    },
+    "modules":
+    [
+        "io"
+    ]
+}

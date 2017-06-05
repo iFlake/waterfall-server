@@ -1,0 +1,1 @@
+const LGameServer = require("gameserver");
