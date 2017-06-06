@@ -15,6 +15,7 @@ class IO
         {
             case "createfile": return this.ProcessCreateFile();
             case "renamefile": return this.ProcessRenameFile();
+            case "readfile": return this.ProcessReadFile();
             
             default: return this.mClient.Error(412, "Unknown command " + this.mClient.mPost.command);
         }
@@ -55,6 +56,8 @@ class IO
 
     ProcessRenameFile()
     {
+        var _this = this;
+
         var truepath;
 
         if (this.mClient.mPost.parameters.relative === true) truepath = module.parent.exports.LConfigManager.mConfig.systemdir + "/" + this.client.mPost.parameters.path;
@@ -71,10 +74,10 @@ class IO
             {
                 switch (error.code)
                 {
-                    case "ENOENT": return this.mClient.Error(404, "Inexistent file");
-                    case "EACCES": return this.mClient.Error(403, "Access rejected");
-                    case "EPERM": return this.mClient.Error(500, "Insufficient permissions");
-                    case "EMFILE": return this.mClient.Error(409, "Maximum file descriptors exceeded");
+                    case "ENOENT": return _this.mClient.Error(404, "Inexistent file");
+                    case "EACCES": return _this.mClient.Error(403, "Access rejected");
+                    case "EPERM": return _this.mClient.Error(500, "Insufficient permissions");
+                    case "EMFILE": return _this.mClient.Error(409, "Maximum file descriptors exceeded");
 
                     case "EXDEV":
                         LFileSystem.readFile(truepath, function (error, data)
@@ -83,12 +86,12 @@ class IO
                             {
                                 switch (error.code)
                                 {
-                                    case "ENOENT": return this.mClient.Error(404, "Inexistent file");
-                                    case "EACCES": return this.mClient.Error(403, "Access rejected");
-                                    case "EPERM": return this.mClient.Error(500, "Insufficient permissions");
-                                    case "EMFILE": return this.mClient.Error(409, "Maximum file descriptors exceeded");
+                                    case "ENOENT": return _this.mClient.Error(404, "Inexistent file");
+                                    case "EACCES": return _this.mClient.Error(403, "Access rejected");
+                                    case "EPERM": return _this.mClient.Error(500, "Insufficient permissions");
+                                    case "EMFILE": return _this.mClient.Error(409, "Maximum file descriptors exceeded");
 
-                                    default: return this.mClient.Error(500, "An error has occurred while trying to read the file: " + error.code);
+                                    default: return _this.mClient.Error(500, "An error has occurred while trying to read the file: " + error.code);
                                 }
                             }
 
@@ -98,12 +101,12 @@ class IO
                                 {
                                     switch (error.code)
                                     {
-                                        case "ENOENT": return this.mClient.Error(404, "Inexistent file");
-                                        case "EACCES": return this.mClient.Error(403, "Access rejected");
-                                        case "EPERM": return this.mClient.Error(500, "Insufficient permissions");
-                                        case "EMFILE": return this.mClient.Error(409, "Maximum file descriptors exceeded");
+                                        case "ENOENT": return _this.mClient.Error(404, "Inexistent file");
+                                        case "EACCES": return _this.mClient.Error(403, "Access rejected");
+                                        case "EPERM": return _this.mClient.Error(500, "Insufficient permissions");
+                                        case "EMFILE": return _this.mClient.Error(409, "Maximum file descriptors exceeded");
 
-                                        default: return this.mClient.Error(500, "An error has occurred while trying to write to the file: " + error.code);
+                                        default: return _this.mClient.Error(500, "An error has occurred while trying to write to the file: " + error.code);
                                     }
                                 }
 
@@ -113,30 +116,61 @@ class IO
                                     {
                                         switch (error.code)
                                         {
-                                            case "ENOENT": return this.mClient.Error(404, "Inexistent file");
-                                            case "EACCES": return this.mClient.Error(403, "Access rejected");
-                                            case "EPERM": return this.mClient.Error(500, "Insufficient permissions");
-                                            case "EMFILE": return this.mClient.Error(409, "Maximum file descriptors exceeded");
+                                            case "ENOENT": return _this.mClient.Error(404, "Inexistent file");
+                                            case "EACCES": return _this.mClient.Error(403, "Access rejected");
+                                            case "EPERM": return _this.mClient.Error(500, "Insufficient permissions");
+                                            case "EMFILE": return _this.mClient.Error(409, "Maximum file descriptors exceeded");
 
-                                            default: return this.mClient.Error(500, "An error has occurred while trying to delete the file: " + error.code);
+                                            default: return _this.mClient.Error(500, "An error has occurred while trying to delete the file: " + error.code);
                                         }
                                     }
 
-                                    return this.mClient.Succeed();
+                                    return _this.mClient.Succeed();
                                 });
                             });
                         });
 
                         return;
 
-                    default: return this.mClient.Error(500, "An error has occurred while trying to rename the file: " + error.code);
+                    default: return _this.mClient.Error(500, "An error has occurred while trying to rename the file: " + error.code);
                 }
             }
 
-            return this.mClient.Succeed();
+            return _this.mClient.Succeed();
         });
 
         return;
+    }
+
+    ProcessReadFile()
+    {
+        var _this = this;
+
+        var truepath;
+
+        if (this.mClient.mPost.parameters.relative === true) truepath = module.parent.exports.LConfigManager.mConfig.systemdir + "/" + this.client.mPost.parameters.path;
+        else truepath = this.mClient.mPost.parameters.path;
+
+        LFileSystem.readFile(truepath, this.mClient.mPost.parameters.options, function (error, data)
+        {
+            if (error != null)
+            {
+                switch (error.code)
+                {
+                    case "ENOENT": return _this.mClient.Error(404, "Inexistent file");
+                    case "EACCES": return _this.mClient.Error(403, "Access rejected");
+                    case "EPERM": return _this.mClient.Error(500, "Insufficient permissions");
+                    case "EMFILE": return _this.mClient.Error(409, "Maximum file descriptors exceeded");
+
+                    default: return _this.mClient.Error(500, "An error has occurred while trying to read the file: " + error.code);
+                }
+            }
+
+            return _this.mClient.Succeed(
+            {
+                data: data
+            });
+        });
     }
 }
 

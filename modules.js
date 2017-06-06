@@ -12,10 +12,10 @@ function LoadModules()
 
 function Transfer(client)
 {
-    var _module = modules.indexOf(client.mPost.type);
-    if (_module == -1) return client.Error(412, "Unknown module");
+    var _module = modules[client.mPost.type];
+    if (_module == undefined) return client.Error(412, "Unknown module");
 
-    (new modules[_module].Module(client)).Serve();
+    (new _module.Module(client)).Serve();
 }
 
 module.exports =

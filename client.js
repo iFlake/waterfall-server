@@ -14,16 +14,21 @@ class Client
 
     Serve()
     {
-        if (request.method != "POST") return this.Error(400, "Method invalid");
+        if (this.mRequest.method != "POST") return this.Error(400, "Method invalid");
 
-        this.ParsePostData();
-        
-        module.parent.exports.LModules.Transfer(this);
+        var _this = this;
+
+        this.ParsePostData(function ()
+        {
+            module.parent.exports.LModules.Transfer(_this);
+        });
     }
 
-    ParsePostData()
+    ParsePostData(callback)
     {
-        var body;
+        var _this = this;
+
+        var body = "";
         
         this.mRequest.on("data", function (chunk)
         {
@@ -36,12 +41,14 @@ class Client
         {
             try
             {
-                this.mPost = JSON.parse(body);
+                _this.mPost = JSON.parse(body);
             }
             catch (error)
             {
-                Error(400, "Failed to parse JSON", "Exception: " + error);
+                return _this.Error(400, "Failed to parse JSON", "Exception: " + error);
             }
+
+            callback();
         });
     }
 
@@ -51,7 +58,7 @@ class Client
 
         this.mResponse.writeHead(200,
         {
-            "Content-Type": "text/json"
+            "Content-Type": "application/json"
         });
 
         this.mResponse.end(JSON.stringify(
@@ -65,7 +72,7 @@ class Client
     {
         this.mResponse.writeHead(httperrorcode,
         {
-            "Content-Type": "text/json"
+            "Content-Type": "application/json"
         });
 
         this.mResponse.end(JSON.stringify(

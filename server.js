@@ -1,13 +1,12 @@
 "use strict";
 
 const LHTTP = require("http");
-const LClient = require("./client");
 
 var mServer = null;
 
 function MainClientHandler(request, response)
 {
-    (new LClient.Client(request, response)).Serve();
+    (new module.parent.exports.LClient.Client(request, response)).Serve();
 }
 
 function Connect()
