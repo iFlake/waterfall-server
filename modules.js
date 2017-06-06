@@ -1,10 +1,12 @@
+"use strict";
+
 var modules = {};
 
 function LoadModules()
 {
     for (var _module in module.parent.exports.LConfigManager.mConfig.modules)
     {
-        modules[module.parent.exports.LConfigManager.mConfig.modules[_module]] = require("modules/" + module.parent.exports.LConfigManager.mConfig.modules[_module]);
+        modules[module.parent.exports.LConfigManager.mConfig.modules[_module]] = require("./imodules/" + module.parent.exports.LConfigManager.mConfig.modules[_module]);
     }
 }
 

@@ -1,3 +1,5 @@
+"use strict";
+
 const LChildProcess    = require("child_process");
 const LFileSystem      = require("fs");
 
@@ -20,6 +22,7 @@ class GameServer
         this.mProcess = LChildProcess.spawn(this.mExecutable, this.mCommandLineParameters,
         {
             detached: true,
+
             uid: this.mIdentity.user,
             gid: this.mIdentity.group
         });
@@ -39,13 +42,13 @@ class GameServer
     {
         if (this.mStopped == true) return;
 
-        var porttestprocess = LChildProcess.exec("netstat -apn | grep '" + this.mProcess.pid + "/'", function (error, stdout, stderr)
+        LChildProcess.exec("netstat -apn | grep '" + this.mProcess.pid + "/'", function (error, stdout, stderr)
         {
-            if (error)
+            if (error != null)
             {
                 this.mStopped = true;
 
-                LFileSystem.appendFile(this.mLogFile, "\n[oxidane internal log] An error occurred while testing server's used ports - exiting\n", function (error) { });
+                LFileSystem.appendFile(this.mLogFile, "\n[waterfall internal log] An error occurred while testing server's used ports - exiting\n", function (error) { });
                 process.kill(-this.mProcess.pid); //we'll let it get away with a graceful SIGTERM - it wasn't its fault anyways
 
                 return;
@@ -61,7 +64,7 @@ class GameServer
                 {
                     this.mStopped = true;
                     
-                    LFileSystem.appendFile(this.mLogFile, "\n[oxidane internal log] Server listening on unauthorized port " + port + " - exiting\n", function (error) { });
+                    LFileSystem.appendFile(this.mLogFile, "\n[waterfall internal log] Server listening on unauthorized port " + port + " - exiting\n", function (error) { });
                     process.kill(-this.mProcess.pid, "SIGKILL");
 
                     return;
@@ -81,7 +84,7 @@ class GameServer
     {
         if (this.mStopped == true) return;
 
-        LFileSystem.appendFile(this.mLogFile, "\n[oxidane internal log] Process terminated (exit code " + code + ") - restarting\n", function (error) { });
+        LFileSystem.appendFile(this.mLogFile, "\n[waterfall internal log] Process terminated (exit code " + code + ") - restarting\n", function (error) { });
         Start();
     }
 }

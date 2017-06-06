@@ -1,1 +1,3 @@
-const LGameServer = require("gameserver");
+"use strict";
+
+const LGameServer = require("./gameserver");

@@ -22,6 +22,8 @@
     },
     "modules":
     [
-        "io"
-    ]
+        "io",
+        "priv"
+    ],
+    "systemdir": "C:\\waterfalltest"
 }

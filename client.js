@@ -1,3 +1,5 @@
+"use strict";
+
 class Client
 {
     constructor (request, response)
@@ -27,7 +29,7 @@ class Client
         {
             body += chunk;
 
-            if (body.length > module.parent.exports.LConfigManager.mConfig.security.maxreqlength)Error(413, "Request too long",  "Maximum request length: " + module.parent.exports.LConfigManager.mConfig.security.maxreqlength + " bytes");
+            if (body.length > module.parent.exports.LConfigManager.mConfig.security.maxreqlength) this.Error(413, "Request too long",  "Maximum request length: " + module.parent.exports.LConfigManager.mConfig.security.maxreqlength + " bytes");
         });
 
         this.mRequest.on("end", function ()
@@ -43,21 +45,35 @@ class Client
         });
     }
 
-    Error(httperrorcode, errorstring, description)
+    Succeed(_data)
     {
-        this.mREsponse.writeHead(httperrorcode,
+        var data = _data || null;
+
+        this.mResponse.writeHead(200,
         {
             "Content-Type": "text/json"
         });
 
-        this.mResponse.write(JSON.stringify(
+        this.mResponse.end(JSON.stringify(
+        {
+            "success": "true",
+            "return": data
+        }));
+    }
+
+    Error(httperrorcode, errorstring, description)
+    {
+        this.mResponse.writeHead(httperrorcode,
+        {
+            "Content-Type": "text/json"
+        });
+
+        this.mResponse.end(JSON.stringify(
         {
             "success": false,
             "error": errorstring,
             "description": description || ""
         }));
-
-        this.mResponse.end();
     }
 }
 

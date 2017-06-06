@@ -1,5 +1,3 @@
-"use strict";
-
 const LFileSystem = require("fs");
 
 function LoadConfig()

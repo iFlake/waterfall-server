@@ -1,6 +1,6 @@
 "use strict";
 
-console.log("Initializing Oxidane");
+console.log("Initializing waterfall");
 
 const LConfigManager   = require("./configmanager");
 const LServer          = require("./server");
@@ -16,5 +16,6 @@ module.exports =
 
 module.exports.LConfigManager.LoadConfig();
 module.exports.LServer.Connect();
+module.exports.LModules.LoadModules();
 
-console.log("Oxidane initialized");
+console.log("Initialized");
